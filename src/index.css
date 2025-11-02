@@ -1,1 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  /***********************************
+   * Font Family Definitions
+   ***********************************/
+  --font-family-inter: 'Inter', sans-serif;
+
+  /***********************************
+   * Color Palette Definitions
+   ***********************************/
+  /* Red Color Palette */
+  --color-red-100: #f9dde0;
+  --color-red-500: #d91e18;
+  --color-red-700: #bc2520;
+
+  /* Gray Color Palette */
+  --color-gray-100: #ffffff;
+  --color-gray-200: #f8f6f6;
+  --color-gray-300: #e0e0e0;
+  --color-gray-500: #b0b0b0;
+  --color-gray-600: #71717a;
+  --color-gray-700: #4d4d4d;
+  --color-gray-900: #1c1c1c;
+
+  /* Green Color Palette */
+  --color-green-100: #e8f5e9;
+  --color-green-500: #2e7d32;
+
+  /* Blue Color Palette */
+  --color-blue-100: #e3f2fd;
+  --color-blue-500: #1565c0;
+
+  /* Orange Color Palette */
+  --color-orange-100: #fff3e0;
+  --color-orange-600: #e26802;
+
+  /***********************************
+   * Semantic Color Variables
+   ***********************************/
+  /* Primary Colors */
+  --color-primary: var(--color-red-500);
+  --color-primary-hover: var(--color-red-700);
+
+  /* Status Colors */
+  --color-success: var(--color-green-500);
+  --color-success-bg: var(--color-green-100);
+
+  --color-info: var(--color-blue-500);
+  --color-info-bg: var(--color-blue-100);
+
+  --color-warning: var(--color-orange-600);
+  --color-warning-bg: var(--color-orange-100);
+
+  --color-error: var(--color-red-700);
+  --color-error-bg: var(--color-red-100);
+
+  /* Background Colors */
+  --color-bg: var(--color-gray-200);
+  --color-bg-card: var(--color-gray-100);
+  --color-bg-info: var(--color-gray-300);
+  --color-bg-hover: var(--color-gray-500);
+
+  /* Text Colors */
+  --color-text-primary: var(--color-gray-900);
+  --color-text-icons: var(--color-gray-700);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-placeholder: var(--color-gray-500);
+  --color-text-inverse: var(--color-gray-100);
+
+  /* Border Colors */
+  --color-border: var(--color-gray-300);
+}

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import './App.css';
+import { Export } from './utils/Export';
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-red-500">Tailwind funciona 🎉</h1>
+      <Export />
     </>
   );
 }
