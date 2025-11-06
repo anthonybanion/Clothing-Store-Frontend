@@ -2,7 +2,6 @@
 # ⚙️ Node & Dependencies
 # ========================================
 node_modules/
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
@@ -23,6 +22,7 @@ dist-ssr/
 .env.development.local
 .env.production.local
 .env.test.local
+.env.docker
 
 # ========================================
 # 🧪 Logs & Debug
@@ -84,3 +84,8 @@ vite.config.js.timestamp-*
 # ========================================
 .turbo/
 .cache/
+
+# Tailwind Settings
+tailwind.config.js
+tailwind.config.cjs
+tailwind.config.ts
