@@ -1,30 +1,55 @@
-// services/productsService.js
+// services/productService.js
 import { apiRequest } from './api';
 
 export const productsService = {
-  // GET ALL
-  getAll: () => apiRequest('/products'),
+  getAll: async () => {
+    const res = await apiRequest('/products');
+    return {
+      products: res.data?.products || [],
+      pagination: {
+        totalItems: res.data?.totalItems ?? 0,
+        totalPage: res.data?.totalPage ?? 1,
+        currentPage: res.data?.currentPage ?? 1,
+      },
+      message: res.message,
+    };
+  },
 
-  // GET BY ID
-  getById: (id) => apiRequest(`/products/${id}`),
+  getById: async (id) => {
+    const res = await apiRequest(`/products/${id}`);
+    return {
+      product: res.data || null,
+      message: res.message,
+    };
+  },
 
-  // CREATE
-  create: (productData) =>
-    apiRequest('/products', {
+  create: async (productData) => {
+    const res = await apiRequest('/products', {
       method: 'POST',
       body: JSON.stringify(productData),
-    }),
+    });
+    return {
+      product: res.data || null,
+      message: res.message,
+    };
+  },
 
-  // UPDATE
-  update: (id, productData) =>
-    apiRequest(`/products/${id}`, {
-      method: 'PATCH', // o PUT dependiendo de tu backend
+  update: async (id, productData) => {
+    const res = await apiRequest(`/products/${id}`, {
+      method: 'PATCH',
       body: JSON.stringify(productData),
-    }),
+    });
+    return {
+      product: res.data || null,
+      message: res.message,
+    };
+  },
 
-  // DELETE
-  delete: (id) =>
-    apiRequest(`/products/${id}`, {
-      method: 'DELETE',
-    }),
+  delete: async (id) => {
+    const res = await apiRequest(`/products/${id}`, { method: 'DELETE' });
+    return {
+      success: true,
+      message: res.message,
+    };
+  },
 };

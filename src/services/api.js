@@ -12,7 +12,10 @@ export async function apiRequest(endpoint, options = {}) {
     });
 
     if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `Error ${response.status}: ${response.statusText}`
+      );
     }
 
     return await response.json();

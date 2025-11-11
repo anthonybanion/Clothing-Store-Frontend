@@ -8,11 +8,12 @@ import { MainLayout } from '../components/templates/MainLayout';
 
 export const ProductsPage = () => {
   const { data: products, loading } = useApiData(productsService.getAll);
+  console.log(products);
   if (loading) return <LoadingSpinner />;
 
   return (
     <MainLayout sidebar={<Navigation />} header={<h1>Productos</h1>}>
-      <ProductList products={products} />
+      <ProductList products={products?.products || []} />
     </MainLayout>
   );
 };
