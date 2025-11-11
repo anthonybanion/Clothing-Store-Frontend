@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ProductsPage } from '../pages/ProductsPage';
-import { HomePage } from '../pages/HomePage';
-import { LoginPage } from '../pages/LoginPage';
-import { UnauthorizedPage } from '../pages/Unauthorized';
+import { ProductPage } from '../pages/product/ProductPage';
+import { HomePage } from '../pages/home/HomePage';
+import { ProfilePage } from '../pages/profile/ProfilePage';
+import LoginPage from '../pages/auth/LoginPage';
+import { UnauthorizedPage } from '../pages/auth/Unauthorized';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/products" element={<ProductsPage />} />
+      <Route path="/products" element={<ProductPage />} />
       <Route
-        path="/"
+        path="/profile"
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
-            <HomePage />
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

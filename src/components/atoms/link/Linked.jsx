@@ -1,7 +1,7 @@
 // components/atoms/NavLink.jsx
 import { Link } from 'react-router-dom';
 
-export const NavLink = ({ to, children }) => {
+export const Linked = ({ to, children }) => {
   return (
     <Link
       to={to}
