@@ -1,17 +1,14 @@
 export const Button = ({
   children,
   variant = 'default',
-  text,
   color,
   hoverColor,
   onClick,
 }) => {
   const variants = {
     default:
-      'font-inter font-bold rounded-xl text-base w-80 h-10 px-4 py-2 xl:w-96 xl:h-12 xl:text-lg text-text-inverse transition-colors',
+      'font-inter font-bold rounded-xl text-base w-full sm:w-80 h-10 px-4 py-2 xl:w-96 xl:h-12 xl:text-lg text-text-inverse transition-colors',
   };
-
-  const buttonText = text ? text : 'Button';
 
   // Use direct Tailwind class names
   const colorClass = color ? `${color}` : 'bg-primary';
@@ -26,7 +23,7 @@ export const Button = ({
       className={`${variants[variant]} ${colorClass} ${hoverClass}`}
       onClick={onClick}
     >
-      {children ? children : buttonText}
+      {children ? children : 'Button'}
     </button>
   );
 };

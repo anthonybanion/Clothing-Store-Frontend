@@ -2,17 +2,19 @@ import { Button } from '../../atoms/button/Button';
 
 export const LoginButton = () => {
   return (
-    <div className="flex flex-col gap-3 xl:gap-4">
+    <div className="flex flex-col gap-3 w-full sm:w-80 xl:gap-4  xl:w-96">
       <Button
-        text="Next"
         color="bg-text-icons"
         hoverColor="hover:bg-text-primary focus:bg-text-primary active:bg-text-primary"
-      />
+      >
+        Login
+      </Button>
       <Button
-        text="Login With Google"
         color="bg-primary"
         hoverColor="hover:bg-primary-hover focus:bg-primary-hover active:bg-primary-hover"
-      />
+      >
+        Login With Google
+      </Button>
     </div>
   );
 };
