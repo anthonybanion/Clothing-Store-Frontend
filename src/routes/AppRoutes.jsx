@@ -6,7 +6,7 @@ import { ProfilePage } from '../pages/profile/ProfilePage';
 import LoginPage from '../pages/auth/LoginPage';
 import { UnauthorizedPage } from '../pages/auth/Unauthorized';
 import { ProtectedRoute } from './ProtectedRoute';
-
+import RegisterPage from '../pages/register/RegisterPage';
 export const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
@@ -14,6 +14,7 @@ export const AppRoutes = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/products" element={<ProductPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/profile"
         element={

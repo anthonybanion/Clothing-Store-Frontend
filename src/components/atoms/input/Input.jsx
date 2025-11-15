@@ -1,17 +1,26 @@
-export const Input = ({ children, variant = 'default', text, type }) => {
+// ==========================================
+//
+// Description: Input
+//
+// File: Input.jsx
+// Author: Anthony Bañon
+// Created: 2025-11-11
+// Last Updated: 2025-11-11
+// ==========================================
+
+export const Input = ({ variant = 'default', className = '', ...props }) => {
+  const baseStyles =
+    'font-inter font-normal border rounded-xl outline-none transition-colors text-sm w-full px-4 py-2';
+
   const variants = {
     default:
-      'font-normal border border-text-secondary rounded-xl font-inter hover:border-border focus:border-border focus:ring focus:ring-border outline-none transition-colors text-sm w-full sm:w-80 h-10 px-4 py-2 xl:w-96 xl:h-12 xl:text-lg placeholder:text-text-placeholder hover:placeholder:text-text-secondary focus:placeholder:text-text-secondary text-text-primary',
+      'border-text-secondary text-text-primary placeholder-text-placeholder hover:border-border focus:border-border focus:ring focus:ring-border',
   };
-
-  const inputText = text ? text : 'Input Field';
-  const inputType = type ? type : 'text';
 
   return (
     <input
-      type={inputType}
-      className={variants[variant]}
-      placeholder={inputText}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      {...props}
     />
   );
 };

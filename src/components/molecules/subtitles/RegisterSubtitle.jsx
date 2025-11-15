@@ -1,4 +1,4 @@
-import { Title } from '../../atoms/text/Title';
+import { Title } from '../../atoms/title/Title';
 import { Paragraph } from '../../atoms/text/Paragraph';
 
 export const RegisterSubtitle = () => {

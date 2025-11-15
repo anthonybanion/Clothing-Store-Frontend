@@ -7,14 +7,26 @@
 // Created: 2025-11-09
 // Last Updated: 2025-11-09
 // ==========================================
+export const Title = ({
+  children,
+  variant = 'default',
+  className = '',
+  ...props
+}) => {
+  const baseStyles = 'font-inter text-text-primary';
 
-export const Title = ({ children, variant = 'default', color }) => {
   const variants = {
-    default: 'text-xl font-semibold font-family-inter',
-    h2Bold: 'text-2xl font-bold font-family-inter xl:text-3xl',
-    h3SemiBold: 'text-lg font-semibold font-family-inter xl:text-2xl',
+    default: 'text-xl font-semibold',
+    h2Bold: 'text-2xl font-bold xl:text-3xl',
+    h3SemiBold: 'text-lg font-semibold xl:text-2xl',
   };
-  const colorClass = color ? `text-${color}` : 'text--color-primary';
 
-  return <h1 className={`${variants[variant]} ${colorClass}`}>{children}</h1>;
+  return (
+    <h1
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      {...props}
+    >
+      {children}
+    </h1>
+  );
 };
