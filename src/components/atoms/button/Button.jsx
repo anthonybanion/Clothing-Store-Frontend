@@ -1,8 +1,13 @@
-/**
- * Atomic Button Component
- * Reusable button with variant support
- * Uses design system tokens from Figma
- */
+// ==========================================
+//
+// Description: Button Component
+//
+// File: Button.jsx
+// Author: Anthony Bañon
+// Created: 2025-11-14
+// Last Updated: 2025-11-14
+// ==========================================
+
 export const Button = ({
   children,
   variant = 'default',
@@ -10,8 +15,8 @@ export const Button = ({
   ...props
 }) => {
   const baseStyles =
-    'font-inter font-bold rounded-xl text-base w-full px-4 py-2 text-text-inverse transition-colors';
-
+    'flex justify-center items-center font-inter font-bold rounded-xl text-sm sm:text-base w-full px-4 h-6 sm:h-8 py-2.5 sm:py-4 text-text-inverse transition-colors';
+  // Define variant styles
   const variants = {
     default:
       'bg-primary hover:bg-primary-hover focus:bg-primary-hover active:bg-primary-hover',

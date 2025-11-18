@@ -7,26 +7,30 @@
 // Created: 2025-11-09
 // Last Updated: 2025-11-09
 // ==========================================
+
 export const Title = ({
   children,
-  variant = 'default',
+  variant = 'title',
   className = '',
   ...props
 }) => {
-  const baseStyles = 'font-inter text-text-primary';
-
+  // Base styles
+  const baseStyles = 'font-inter font-semibold text-text-primary';
+  // Define variant styles
   const variants = {
-    default: 'text-xl font-semibold',
-    h2Bold: 'text-2xl font-bold xl:text-3xl',
-    h3SemiBold: 'text-lg font-semibold xl:text-2xl',
+    brand: 'text-xl',
+    title: 'text-2xl font-bold sm:text-3xl',
+    subtitle: 'text-lg sm:text-3xl',
   };
+  // Determine the HTML tag based on variant
+  const Tag = variant === 'title' ? 'h1' : 'h2';
 
   return (
-    <h1
+    <Tag
       className={`${baseStyles} ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
-    </h1>
+    </Tag>
   );
 };

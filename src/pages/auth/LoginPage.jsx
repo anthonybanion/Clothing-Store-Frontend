@@ -1,11 +1,43 @@
-import { LoginCard } from '../../components/organisms/card/LoginCard';
-import RegisterTemplate from '../../components/templates/register_layout/RegisterTemplate';
+// pages/LoginPage.jsx
+import AuthTemplate from '../../components/templates/auth_layout/AuthTemplate';
+import { LoginForm } from '../../components/organisms/forms/LoginForm';
+import { useLogin } from '../../hooks/useLogin';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 export default function LoginPage() {
+  const { login: apiLogin, loading, error } = useLogin();
+  const { login: authLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async ({ username, password }) => {
+    try {
+      const resp = await apiLogin(username, password);
+
+      // Ejemplo: resp = { accessToken, refreshToken, user, role }
+      authLogin({
+        accessToken: resp.accessToken,
+        refreshToken: resp.refreshToken,
+        user: resp.user,
+        role: resp.role,
+      });
+
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Login failed:', err);
+    }
+  };
+
+  // Aquí iría:
+  // - Llamadas a API
+  // - Manejo de estado global
+  // - Redirecciones
+  // - Manejo de errores
+
   return (
-    <>
-      <RegisterTemplate>
-        <LoginCard />
-      </RegisterTemplate>
-    </>
+    <AuthTemplate>
+      <LoginForm onSubmit={handleLogin} isLoading={loading} />
+      {error && <p className="text-red-500">{error}</p>}
+    </AuthTemplate>
   );
 }

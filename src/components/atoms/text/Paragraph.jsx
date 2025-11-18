@@ -1,6 +1,6 @@
 // ==========================================
 //
-// Description: Text
+// Description: Text Component
 //
 // File: Text.jsx
 // Author: Anthony Bañon
@@ -10,18 +10,15 @@
 
 export const Paragraph = ({
   children,
-  variant = 'default',
+  variant = 'normal',
   className = '',
   ...props
 }) => {
+  // Define variant styles
   const variants = {
-    default: 'text-base font-normal font-inter xl:text-lg text-text-primary',
-    paragraphSemibold:
-      'text-sm font-semibold font-inter xl:text-lg text-text-primary',
-    smallRegular: 'text-sm font-normal font-inter text-text-primary',
-    smallSemibold:
-      'text-sm font-semibold font-inter xl:text-base text-text-primary',
-    extraSmall: 'text-xs font-normal font-inter xl:text-sm text-text-primary',
+    normal: 'font-normal font-inter',
+    semibold: 'font-semibold font-inter',
+    bold: 'font-bold font-inter',
   };
 
   return (
