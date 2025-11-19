@@ -1,6 +1,6 @@
 // ==========================================
 //
-// Description: Text
+// Description: Text Component
 //
 // File: Text.jsx
 // Author: Anthony Bañon
@@ -8,18 +8,22 @@
 // Last Updated: 2025-11-09
 // ==========================================
 
-export const Paragraph = ({ children, variant = 'default', color }) => {
+export const Paragraph = ({
+  children,
+  variant = 'normal',
+  className = '',
+  ...props
+}) => {
+  // Define variant styles
   const variants = {
-    default: 'text-base font-normal font-inter xl:text-lg',
-    paragraphSemibold: 'text-sm font-semibold font-inter xl:text-lg',
-    smallRegular: 'text-sm font-normal font-inter',
-    smallSemibold: 'text-sm font-semibold font-inter xl:text-base',
-    extraSmall: 'text-xs font-normal font-inter xl:text-sm',
+    normal: 'font-normal font-inter',
+    semibold: 'font-semibold font-inter',
+    bold: 'font-bold font-inter',
   };
 
-  const colorClass = color ? `text-${color}` : 'text-text-primary';
-
   return (
-    <span className={`${variants[variant]} ${colorClass}`}>{children}</span>
+    <span className={`${variants[variant]} ${className}`} {...props}>
+      {children}
+    </span>
   );
 };

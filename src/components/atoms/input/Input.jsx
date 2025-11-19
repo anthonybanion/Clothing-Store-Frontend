@@ -1,17 +1,59 @@
-export const Input = ({ children, variant = 'default', text, type }) => {
+// ==========================================
+//
+// Description: Input
+//
+// File: Input.jsx
+// Author: Anthony Bañon
+// Created: 2025-11-11
+// Last Updated: 2025-11-11
+// ==========================================
+
+export const Input = ({
+  variant = 'default',
+  className = '',
+  message, // Mensaje único (puede ser de error o éxito)
+  ...props
+}) => {
+  const baseStyles =
+    'font-inter font-normal border rounded-xl outline-none transition-colors text-sm sm:text-base w-full px-4 h-6 sm:h-8 py-2.5 sm:py-4';
+
   const variants = {
     default:
-      'font-normal border border-text-secondary rounded-xl font-inter hover:border-border focus:border-border focus:ring focus:ring-border outline-none transition-colors text-sm w-full sm:w-80 h-10 px-4 py-2 xl:w-96 xl:h-12 xl:text-lg placeholder:text-text-placeholder hover:placeholder:text-text-secondary focus:placeholder:text-text-secondary text-text-primary',
+      'border-text-secondary text-text-primary placeholder-text-placeholder hover:border-border focus:border-border focus:ring focus:ring-border',
+    error:
+      'border-error text-error placeholder-error/60 hover:border-error focus:border-error focus:ring focus:ring-error/20 bg-error/5',
+    success:
+      'border-success text-success placeholder-success/60 hover:border-success focus:border-success focus:ring focus:ring-success/20 bg-success/5',
   };
 
-  const inputText = text ? text : 'Input Field';
-  const inputType = type ? type : 'text';
+  // Define message styles based on the variant
+  const messageStyles = {
+    error: 'text-error',
+    success: 'text-success',
+    default: 'text-text-secondary',
+  };
 
   return (
-    <input
-      type={inputType}
-      className={variants[variant]}
-      placeholder={inputText}
-    />
+    <div className="w-full">
+      <input
+        className={`${baseStyles} ${variants[variant]} ${className}`}
+        {...props}
+      />
+
+      {/* Message unique that changes based on the variant */}
+      {message && (
+        <p
+          className={`mt-1 text-[8px] flex items-center gap-1 ${
+            messageStyles[variant] || messageStyles.default
+          }`}
+        >
+          <span>
+            {variant === 'error' && '⚠️'}
+            {variant === 'success' && '✅'}
+          </span>
+          {message}
+        </p>
+      )}
+    </div>
   );
 };
