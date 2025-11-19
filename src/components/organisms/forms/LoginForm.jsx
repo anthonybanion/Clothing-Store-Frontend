@@ -31,7 +31,7 @@ export const LoginForm = ({ onSubmit, isLoading = false }) => {
           Login
         </Title>
 
-        <div className="space-y-2 sm:space-y-3">
+        <div className="flex flex-col gap-2 sm:gap-3">
           <UsernameInput
             value={username}
             onChange={(e) => setUsername(e.target.value)}

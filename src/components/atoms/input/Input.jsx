@@ -43,7 +43,7 @@ export const Input = ({
       {/* Message unique that changes based on the variant */}
       {message && (
         <p
-          className={`mt-1 text-xs flex items-center gap-1 ${
+          className={`mt-1 text-[8px] flex items-center gap-1 ${
             messageStyles[variant] || messageStyles.default
           }`}
         >

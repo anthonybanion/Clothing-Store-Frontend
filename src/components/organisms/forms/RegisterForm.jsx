@@ -7,11 +7,22 @@ import { NextButton } from '../../molecules/buttons/NextButton';
 import { Title } from '../../atoms/text/Title';
 import { Paragraph } from '../../atoms/text/Paragraph';
 import { Link } from '../../atoms/link/Link';
+import { useState } from 'react';
 
 export const RegisterForm = ({ onSubmit, isLoading = false }) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [dni, setDni] = useState('');
+  const [email, setEmail] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSubmit) onSubmit();
+    // validation check
+    if (!firstName || !lastName || !dni || !email) {
+      return alert('Please fill in all fields.');
+    }
+
+    if (onSubmit) onSubmit({ firstName, lastName, dni, email });
   };
 
   return (
@@ -25,10 +36,26 @@ export const RegisterForm = ({ onSubmit, isLoading = false }) => {
         </div>
 
         <div className="flex flex-col gap-2 sm:gap-3">
-          <FirstNameInput />
-          <LastNameInput />
-          <DniInput />
-          <EmailInput />
+          <FirstNameInput
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            disabled={isLoading}
+          />
+          <LastNameInput
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            disabled={isLoading}
+          />
+          <DniInput
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            disabled={isLoading}
+          />
+          <EmailInput
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+          />
           <Link to="/signup">
             <NextButton type="submit" disabled={isLoading}>
               {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}

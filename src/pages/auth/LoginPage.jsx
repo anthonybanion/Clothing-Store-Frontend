@@ -14,7 +14,7 @@ export default function LoginPage() {
     try {
       const resp = await apiLogin(username, password);
 
-      // Ejemplo: resp = { accessToken, refreshToken, user, role }
+      // Set auth context resp = { accessToken, refreshToken, user, role }
       authLogin({
         accessToken: resp.accessToken,
         refreshToken: resp.refreshToken,
@@ -22,17 +22,11 @@ export default function LoginPage() {
         role: resp.role,
       });
 
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       console.error('Login failed:', err);
     }
   };
-
-  // Aquí iría:
-  // - Llamadas a API
-  // - Manejo de estado global
-  // - Redirecciones
-  // - Manejo de errores
 
   return (
     <AuthTemplate>
