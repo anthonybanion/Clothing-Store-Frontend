@@ -1,6 +1,5 @@
 import { PasswordInput } from '../../molecules/inputs/PasswordInput';
 import { UsernameInput } from '../../molecules/inputs/UsernameInput';
-import { GoogleLoginButton } from '../../molecules/buttons/GoogleLoginButton';
 import { SignInButton } from '../../molecules/buttons/SignInButton';
 import { Title } from '../../atoms/text/Title';
 import { Paragraph } from '../../atoms/text/Paragraph';
@@ -45,14 +44,6 @@ export const LoginForm = ({ onSubmit, isLoading = false }) => {
           <SignInButton type="submit" disabled={isLoading}>
             {isLoading ? 'Starting...' : 'Login'}
           </SignInButton>
-
-          <GoogleLoginButton
-            type="button"
-            onClick={() => {
-              console.log('Google login clicked');
-              /* lógica de Google */
-            }}
-          />
         </div>
 
         <div className="mt-1.5 md:mt-2 flex justify-between">

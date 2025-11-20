@@ -3,7 +3,7 @@ import { Paragraph } from '../../atoms/text/Paragraph';
 
 export const SignUpButton = ({ onClick }) => {
   return (
-    <Button variant="secondary" onClick={onClick}>
+    <Button variant="default" onClick={onClick}>
       <Paragraph variant="bold">Sign Up</Paragraph>
     </Button>
   );
