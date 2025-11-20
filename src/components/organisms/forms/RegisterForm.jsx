@@ -2,7 +2,6 @@ import { FirstNameInput } from '../../molecules/inputs/FirstNameInput';
 import { LastNameInput } from '../../molecules/inputs/LastNameInput';
 import { DniInput } from '../../molecules/inputs/DniInput';
 import { EmailInput } from '../../molecules/inputs/EmailInput';
-import { GoogleSignUpButton } from '../../molecules/buttons/GoogleSignUpButton';
 import { NextButton } from '../../molecules/buttons/NextButton';
 import { Title } from '../../atoms/text/Title';
 import { Paragraph } from '../../atoms/text/Paragraph';
@@ -61,12 +60,6 @@ export const RegisterForm = ({ onSubmit, isLoading = false }) => {
               {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
             </NextButton>
           </Link>
-          <GoogleSignUpButton
-            type="button"
-            onClick={() => {
-              /* lógica de Google */
-            }}
-          />
         </div>
 
         <div className="mt-1.5 md:mt-2 flex justify-between">
