@@ -1,15 +1,38 @@
-import { authService } from './authService';
+// ==========================================
+//
+// Description: Token Interceptor
+//
+// File: tokenInterceptor.js
+// Author: Anthony Bañon
+// Created: 2025-11-19
+// Last Updated: 2025-11-19
+// ==========================================
+
+// services/auth/tokenInterceptor.js
 
 class TokenInterceptor {
   constructor() {
     this.isRefreshing = false;
     this.failedQueue = [];
+    this.authFunctions = null;
   }
+  // Set auth functions from AuthContext
+  setAuthFunctions(functions) {
+    // Save the functions to use later
+    this.authFunctions = functions;
+  }
+  // Handle 401 Unauthorized responses
+  async handleUnauthorized() {
+    if (!this.authFunctions) {
+      this.redirectToLogin();
+      return false;
+    }
 
-  async handleUnauthorized(error) {
-    // Si ya estamos refrescando, encolar la petición
+    // If already refreshing, queue the request
     if (this.isRefreshing) {
+      // Return a promise that resolves when the token is refreshed
       return new Promise((resolve, reject) => {
+        // Add to the queue
         this.failedQueue.push({ resolve, reject });
       });
     }
@@ -17,47 +40,36 @@ class TokenInterceptor {
     this.isRefreshing = true;
 
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      if (!refreshToken) {
-        this.redirectToLogin();
-        return Promise.reject(error);
-      }
-
-      // Intentar refrescar el token
-      const result = await authService.refreshToken(refreshToken);
-
-      if (result && result.data && result.data.accessToken) {
-        localStorage.setItem('accessToken', result.data.accessToken);
-
-        // Procesar cola de peticiones fallidas
+      const success = await this.authFunctions.handleRefresh();
+      // If refresh was successful
+      if (success) {
+        // Process the queue of failed requests
         this.failedQueue.forEach(({ resolve }) => resolve());
         this.failedQueue = [];
-
         return true;
       } else {
-        throw new Error('Invalid refresh response');
+        throw new Error('Token refresh failed');
       }
     } catch (refreshError) {
+      // Log the error
       console.error('Token refresh failed:', refreshError);
 
-      // Rechazar todas las peticiones en cola
+      // Reject all queued requests
       this.failedQueue.forEach(({ reject }) => reject(refreshError));
+      // Clear the queue
       this.failedQueue = [];
 
-      this.redirectToLogin();
+      this.authFunctions.logout();
       return false;
     } finally {
       this.isRefreshing = false;
     }
   }
-
+  // Redirect to login page
   redirectToLogin() {
-    // Limpiar tokens
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-
-    // Redirigir al login
+    // Clear local storage and redirect to login page
+    localStorage.clear();
+    // Redirect to login page
     window.location.href = '/login';
   }
 }

@@ -1,30 +1,28 @@
 // pages/LoginPage.jsx
 import AuthTemplate from '../../components/templates/auth_layout/AuthTemplate';
 import { LoginForm } from '../../components/organisms/forms/LoginForm';
-import { useLogin } from '../../hooks/useLogin';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function LoginPage() {
-  const { login: apiLogin, loading, error } = useLogin();
-  const { login: authLogin } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   const handleLogin = async ({ username, password }) => {
     try {
-      const resp = await apiLogin(username, password);
+      setError('');
+      const result = await login(username, password);
 
-      // Set auth context resp = { accessToken, refreshToken, user, role }
-      authLogin({
-        accessToken: resp.accessToken,
-        refreshToken: resp.refreshToken,
-        user: resp.user,
-        role: resp.role,
-      });
-
-      navigate('/');
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.error);
+      }
     } catch (err) {
       console.error('Login failed:', err);
+      setError(err.message || 'Login failed');
     }
   };
 
