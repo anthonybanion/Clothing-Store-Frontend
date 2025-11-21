@@ -6,8 +6,8 @@ import { ProfilePage } from '../pages/profile/ProfilePage';
 import LoginPage from '../pages/auth/LoginPage';
 import { UnauthorizedPage } from '../pages/auth/Unauthorized';
 import { ProtectedRoute } from './ProtectedRoute';
-import RegisterPage from '../pages/auth/RegisterPage';
-import SignUpPage from '../pages/auth/SignUpPages';
+import RegisterPage from '../pages/register/RegisterPage';
+import SignUpPage from '../pages/register/SignUpPages';
 export const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
