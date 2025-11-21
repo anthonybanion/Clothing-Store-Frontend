@@ -1,59 +1,71 @@
-import { apiRequest } from '../api';
+// ==========================================
+//
+// Description: Person Service
+//
+// File: personService.js
+// Author: Anthony Bañon
+// Created: 2025-11-20
+// Last Updated: 2025-11-20
+// ==========================================
 
-// Register a new person
-export async function createOnePerson(firstName, lastName, dni, email) {
-  return await apiRequest('/persons', {
-    method: 'POST',
-    body: JSON.stringify({
+import { apiClient } from '../api';
+
+export const personService = {
+  // Register a new person
+  async create(firstName, lastName, dni, email) {
+    return await apiClient.post('/persons', {
       first_name: firstName,
       last_name: lastName,
       dni,
       email,
-    }),
-  });
-}
-// Get person by ID
-export async function getOnePerson(personId) {
-  return await apiRequest(`/persons/${personId}`, {
-    method: 'GET',
-  });
-}
-// Get all persons
-export async function getAllPersons() {
-  return await apiRequest('/persons', {
-    method: 'GET',
-  });
-}
-// Update person by ID
-export async function updatePerson(personId, data) {
-  return await apiRequest(`/persons/${personId}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  });
-}
+    });
+  },
 
-export async function updatePartialPerson(personId, data) {
-  return await apiRequest(`/persons/${personId}`, {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-  });
-}
-// Update person status (activate/deactivate)
-export async function updatePersonStatus(personId, isActive) {
-  return await apiRequest(`/persons/${personId}/status`, {
-    method: 'PATCH',
-    body: JSON.stringify({ is_active: isActive }),
-  });
-}
+  // Get person by ID
+  async getOne(id) {
+    return await apiClient.get(`/persons/${id}`);
+  },
 
-export async function deletePersonImage(personId) {
-  return await apiRequest(`/persons/${personId}/image`, {
-    method: 'DELETE',
-  });
-}
-// Delete person by ID
-export async function deletePerson(personId) {
-  return await apiRequest(`/persons/${personId}`, {
-    method: 'DELETE',
-  });
-}
+  // Get all persons
+  async getAll(filters = {}) {
+    // ✅ Agregar soporte para filtros como en categories
+    const queryParams = new URLSearchParams();
+    if (filters.name) queryParams.append('name', filters.name);
+    if (filters.is_active !== undefined)
+      queryParams.append('is_active', filters.is_active);
+    if (filters.sort) queryParams.append('sort', filters.sort);
+    if (filters.page) queryParams.append('page', filters.page);
+    if (filters.limit) queryParams.append('limit', filters.limit);
+
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/persons?${queryString}` : '/persons';
+    return await apiClient.get(endpoint);
+  },
+
+  // Update person by ID (full update)
+  async update(id, data) {
+    return await apiClient.put(`/persons/${id}`, data);
+  },
+
+  // Update person by ID (partial update)
+  async updatePartial(id, data) {
+    return await apiClient.patch(`/persons/${id}`, data);
+  },
+
+  // Update person status (activate/deactivate)
+  async updateStatus(id, isActive) {
+    return await apiClient.patch(`/persons/${id}/status`, {
+      is_active: isActive,
+    });
+  },
+
+  // Delete person image
+  async deleteImage(id) {
+    return await apiClient.delete(`/persons/${id}/image`);
+  },
+
+  // Delete person by ID
+  async delete(id) {
+    return await apiClient.delete(`/persons/${id}`);
+  },
+};

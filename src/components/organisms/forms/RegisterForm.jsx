@@ -5,7 +5,6 @@ import { EmailInput } from '../../molecules/inputs/EmailInput';
 import { NextButton } from '../../molecules/buttons/NextButton';
 import { Title } from '../../atoms/text/Title';
 import { Paragraph } from '../../atoms/text/Paragraph';
-import { Link } from '../../atoms/link/Link';
 import { useState } from 'react';
 
 export const RegisterForm = ({ onSubmit, isLoading = false }) => {
@@ -55,11 +54,9 @@ export const RegisterForm = ({ onSubmit, isLoading = false }) => {
             onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
           />
-          <Link to="/signup">
-            <NextButton type="submit" disabled={isLoading}>
-              {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
-            </NextButton>
-          </Link>
+          <NextButton type="submit" disabled={isLoading}>
+            {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
+          </NextButton>
         </div>
 
         <div className="mt-1.5 md:mt-2 flex justify-between">

@@ -8,8 +8,6 @@
 // Last Updated: 2025-11-19
 // ==========================================
 
-// services/auth/tokenInterceptor.js
-
 class TokenInterceptor {
   constructor() {
     this.isRefreshing = false;
@@ -23,6 +21,7 @@ class TokenInterceptor {
   }
   // Handle 401 Unauthorized responses
   async handleUnauthorized() {
+    // If auth functions are not set, redirect to login
     if (!this.authFunctions) {
       this.redirectToLogin();
       return false;
