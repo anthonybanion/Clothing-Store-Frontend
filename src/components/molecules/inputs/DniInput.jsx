@@ -1,8 +1,7 @@
 import { Input } from '../../atoms/input/Input';
 
-export const DniInput = ({ isValid, message, ...props }) => {
-  const variant =
-    isValid === true ? 'success' : isValid === false ? 'error' : 'default';
+export const DniInput = ({ hasError, ...props }) => {
+  const variant = hasError ? 'error' : 'default';
 
   return (
     <div className="w-full">
@@ -10,7 +9,6 @@ export const DniInput = ({ isValid, message, ...props }) => {
         variant={variant}
         type="text"
         placeholder="DNI of 8 digits"
-        message={message}
         {...props}
       />
     </div>

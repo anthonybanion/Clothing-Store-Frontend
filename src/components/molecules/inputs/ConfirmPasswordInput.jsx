@@ -1,13 +1,13 @@
 import { Input } from '../../atoms/input/Input';
 
-export const ConfirmPasswordInput = ({ hasError, message, ...props }) => {
+export const ConfirmPasswordInput = ({ hasError, ...props }) => {
+  const variant = hasError ? 'error' : 'default';
   return (
     <div className="w-full">
       <Input
-        variant={hasError ? 'error' : 'default'}
+        variant={variant}
         type="password"
         placeholder="Confirm Password"
-        message={message}
         {...props}
       />
     </div>
