@@ -1,18 +1,11 @@
 import { Input } from '../../atoms/input/Input';
 
-export const UsernameInput = ({ isValid, message, ...props }) => {
-  const variant =
-    isValid === true ? 'success' : isValid === false ? 'error' : 'default';
+export const UsernameInput = ({ hasError, ...props }) => {
+  const variant = hasError ? 'error' : 'default';
 
   return (
     <div className="w-full">
-      <Input
-        variant={variant}
-        type="text"
-        placeholder="Username"
-        message={message}
-        {...props}
-      />
+      <Input variant={variant} type="text" placeholder="Username" {...props} />
     </div>
   );
 };
