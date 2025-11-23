@@ -1,48 +1,48 @@
 // ==========================================
 //
-// Description: Register Page
+// Description: Login Page
 //
-// File: RegisterPage.jsx
+// File: LoginPage.jsx
 // Author: Anthony Bañon
 // Created: 2025-11-21
 // Last Updated: 2025-11-21
 // ==========================================
 
 import AuthTemplate from '../../components/templates/auth_layout/AuthTemplate';
-import { RegisterForm } from '../../components/organisms/register_form/RegisterForm';
-import { registerPageLogic } from './registerPageLogic';
-import { registerFormLogic } from '../../components/organisms/register_form/registerFormLogic';
+import { LoginForm } from '../../components/organisms/login_form/LoginForm';
+import { loginPageLogic } from './loginPageLogic';
+import { loginFormLogic } from '../../components/organisms/login_form/loginFormLogic';
 import { useCallback } from 'react';
 import { LoadingSpinner } from '../../components/atoms/spinner/LoadingSpinner';
 
-export default function RegisterPage() {
+export default function LoginPage() {
   // Page business logic
-  const { handleRegister, isLoading } = registerPageLogic();
+  const { handleLogin, isLoading } = loginPageLogic();
 
   // Form business logic
-  const formLogic = registerFormLogic();
+  const formLogic = loginFormLogic();
 
   // Handle form submission
   const handleFormSubmit = useCallback(() => {
     if (formLogic.canSubmit) {
       formLogic.setIsSubmitting(true);
-      handleRegister(formLogic.formData).finally(() => {
+      handleLogin(formLogic.formData).finally(() => {
         formLogic.setIsSubmitting(false);
       });
     }
-  }, [formLogic.canSubmit, formLogic.formData, handleRegister]);
+  }, [formLogic.canSubmit, formLogic.formData, handleLogin]);
 
   if (isLoading) {
     return (
       <AuthTemplate>
-        <LoadingSpinner message="Loading registration..." />
+        <LoadingSpinner message="Loading..." />
       </AuthTemplate>
     );
   }
 
   return (
     <AuthTemplate>
-      <RegisterForm
+      <LoginForm
         // Form state
         formData={formLogic.formData}
         errors={formLogic.errors}

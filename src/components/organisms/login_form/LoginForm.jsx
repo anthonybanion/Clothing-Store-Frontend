@@ -1,3 +1,13 @@
+// ==========================================
+//
+// Description: Login Form
+//
+// File: LoginForm.jsx
+// Author: Anthony Bañon
+// Created: 2025-11-22
+// Last Updated: 2025-11-22
+// ==========================================
+
 import { PasswordInput } from '../../molecules/inputs/PasswordInput';
 import { UsernameInput } from '../../molecules/inputs/UsernameInput';
 import { SignInButton } from '../../molecules/buttons/SignInButton';
@@ -10,21 +20,15 @@ export const LoginForm = ({
   formData,
   errors,
   touched,
-  isLoading,
-  onFieldChange,
-  onFieldBlur,
+  isSubmitting,
+  canSubmit,
+  createFieldHandlers,
   onSubmit,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     onSubmit();
   };
-
-  const canSubmit =
-    !isLoading &&
-    formData.username &&
-    formData.password &&
-    Object.keys(errors).length === 0;
 
   return (
     <div className="w-full flex flex-col justify-center h-62 sm:h-84 px-8 sm:px-16 md:px-22 lg:px-24 xl:px-26">
@@ -34,41 +38,46 @@ export const LoginForm = ({
         </Title>
 
         <div className="flex flex-col gap-2 sm:gap-3">
+          {/* Username Field */}
           <div>
             <UsernameInput
               value={formData.username}
-              onChange={onFieldChange('username')}
-              onBlur={onFieldBlur('username')}
-              disabled={isLoading}
+              {...createFieldHandlers('username')}
+              disabled={isSubmitting}
               hasError={touched.username && errors.username}
             />
             {touched.username && errors.username && (
               <ErrorMessage>{errors.username}</ErrorMessage>
             )}
           </div>
+
+          {/* Password Field */}
           <div>
             <PasswordInput
               value={formData.password}
-              onChange={onFieldChange('password')}
-              onBlur={onFieldBlur('password')}
-              disabled={isLoading}
+              {...createFieldHandlers('password')}
+              disabled={isSubmitting}
               hasError={touched.password && errors.password}
             />
             {touched.password && errors.password && (
               <ErrorMessage>{errors.password}</ErrorMessage>
             )}
           </div>
+
+          {/* Submit Button */}
           <SignInButton
             type="submit"
             disabled={!canSubmit}
-            isLoading={isLoading}
+            isLoading={isSubmitting}
           >
-            {isLoading ? 'Starting...' : 'Login'}
+            {isSubmitting ? 'Signing in...' : 'Login'}
           </SignInButton>
         </div>
+
+        {/* Sign Up Link */}
         <div className="mt-1.5 md:mt-2 flex justify-between">
           <Paragraph className="text-xs md:text-sm text-text-secondary">
-            Do you have an account?
+            Don't have an account?
           </Paragraph>
           <Link
             to="/register"
