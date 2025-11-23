@@ -11,18 +11,19 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/auth/authService';
 import { tokenInterceptor } from '../services/auth/tokenInterceptor';
+import { STORAGE_KEYS, ERROR_MESSAGES } from '../utils/constants';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(
-    localStorage.getItem('accessToken')
+    localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
   );
   const [refreshToken, setRefreshToken] = useState(
-    localStorage.getItem('refreshToken')
+    localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)
   );
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('user')) || null
+    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)) || null
   );
   const [role, setRole] = useState(localStorage.getItem('userRole') || null);
   const [loading, setLoading] = useState(true);
@@ -31,14 +32,16 @@ export const AuthProvider = ({ children }) => {
 
   // Save to localStorage when states change
   useEffect(() => {
-    if (accessToken) localStorage.setItem('accessToken', accessToken);
-    else localStorage.removeItem('accessToken');
+    if (accessToken)
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    else localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
 
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-    else localStorage.removeItem('refreshToken');
+    if (refreshToken)
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+    else localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
 
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
+    if (user) localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+    else localStorage.removeItem(STORAGE_KEYS.USER);
 
     if (role) localStorage.setItem('userRole', role);
     else localStorage.removeItem('userRole');
@@ -59,45 +62,38 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      // If there is no token, we are not authenticated
+      const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
       if (!token) {
         setLoading(false);
         return;
       }
 
-      // Validate token with the backend
       const validation = await authService.validateToken(token);
-      // If valid, get profile; if not, try to refresh
       if (validation.valid) {
-        // Token is valid, get user profile
         await getProfile();
       } else {
-        // Try to refresh the token
         await handleTokenRefresh();
       }
     } catch (error) {
-      console.error('Error checking auth:', error);
       logout();
     } finally {
       setLoading(false);
     }
   };
-  // Handle token refresh
+
   const handleTokenRefresh = async () => {
     try {
-      // Get the refresh token from state or localStorage
-      const currentRefreshToken = localStorage.getItem('refreshToken');
+      const currentRefreshToken = localStorage.getItem(
+        STORAGE_KEYS.REFRESH_TOKEN
+      );
       if (!currentRefreshToken) {
-        throw new Error('No refresh token available');
+        throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
       }
-      // Call the authService to refresh the token
+
       const result = await authService.refreshToken(currentRefreshToken);
       if (result.data && result.data.accessToken) {
-        // Update access token in state and localStorage
         setAccessToken(result.data.accessToken);
 
-        // Update refresh token if a new one is provided
         if (result.data.refreshToken) {
           setRefreshToken(result.data.refreshToken);
         }
@@ -105,68 +101,55 @@ export const AuthProvider = ({ children }) => {
       }
       return false;
     } catch (error) {
-      console.error('Token refresh failed:', error);
       logout();
       return false;
     }
   };
-  // Get user profile
+
   const getProfile = async () => {
     try {
-      // Call the authService to get the profile
       const profile = await authService.getProfile();
-
       if (profile.data) {
-        // Update user and role state
         setUser(profile.data.user || profile.data);
         setRole(profile.data.role || profile.data.user?.role);
       }
     } catch (error) {
-      console.error('Error getting profile:', error);
       throw error;
     }
   };
-  // Login function
+
   const login = async (username, password) => {
     try {
-      // Start loading
       setLoading(true);
-      // Call the authService to login
       const result = await authService.login(username, password);
-      // If login is successful, update states
+
       if (result.data) {
         const { accessToken, refreshToken, user, role } = result.data;
-        // Update states and localStorage
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         setUser(user);
         setRole(role);
-        // Return success
         return { success: true, data: result.data };
       }
-      // Return failure
-      return { success: false, error: 'Login failed' };
+      return { success: false, error: ERROR_MESSAGES.INVALID_CREDENTIALS };
     } catch (error) {
-      console.error('Login error:', error);
       return {
         success: false,
-        error: error.message || 'Login failed',
+        error: error.message || ERROR_MESSAGES.INVALID_CREDENTIALS,
       };
     } finally {
       setLoading(false);
     }
   };
-  // Logout function
+
   const logout = async () => {
     try {
       if (accessToken) {
-        // Call the authService to logout
         await authService.logout();
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      // Silent fail on logout error
     } finally {
-      // Clear all auth states and localStorage
       setAccessToken(null);
       setRefreshToken(null);
       setUser(null);
@@ -176,15 +159,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = {
-    // Estado
     accessToken,
     refreshToken,
     user,
     role,
     isAuthenticated,
     loading,
-
-    // Acciones
     login,
     logout,
     refreshAuthToken: handleTokenRefresh,
@@ -192,9 +172,8 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-// Custom hook to use the AuthContext
+
 export const useAuth = () => {
-  // Get the context
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

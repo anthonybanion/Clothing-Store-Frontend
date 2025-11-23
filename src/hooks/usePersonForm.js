@@ -1,4 +1,13 @@
-// hooks/usePersonForm.js
+// ==========================================
+//
+// Description: Use Person Form
+//
+// File: usePersonForm.js
+// Author: Anthony Bañon
+// Created: 2025-11-21
+// Last Updated: 2025-11-21
+// ==========================================
+
 import { useState, useCallback } from 'react';
 import {
   validatePersonForm,

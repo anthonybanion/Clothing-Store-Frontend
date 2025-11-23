@@ -22,23 +22,15 @@ export const RegisterForm = ({
   formData,
   errors,
   touched,
-  isLoading,
-  onFieldChange,
-  onFieldBlur,
+  isSubmitting,
+  canSubmit,
+  createFieldHandlers,
   onSubmit,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     onSubmit();
   };
-  // Determine if the form can be submitted
-  const canSubmit =
-    !isLoading &&
-    formData.firstName &&
-    formData.lastName &&
-    formData.dni &&
-    formData.email &&
-    Object.keys(errors).length === 0;
 
   return (
     <div className="w-full flex flex-col justify-center h-82 sm:h-114 px-8 sm:px-16 md:px-22 lg:px-24 xl:px-26">
@@ -51,59 +43,69 @@ export const RegisterForm = ({
         </div>
 
         <div className="flex flex-col gap-2 sm:gap-3">
+          {/* First Name Field */}
           <div>
             <FirstNameInput
               value={formData.firstName}
-              onChange={onFieldChange('firstName')}
-              onBlur={onFieldBlur('firstName')}
-              disabled={isLoading}
+              {...createFieldHandlers('firstName')}
+              disabled={isSubmitting}
               hasError={touched.firstName && errors.firstName}
             />
             {touched.firstName && errors.firstName && (
               <ErrorMessage>{errors.firstName}</ErrorMessage>
             )}
           </div>
+
+          {/* Last Name Field */}
           <div>
             <LastNameInput
               value={formData.lastName}
-              onChange={onFieldChange('lastName')}
-              onBlur={onFieldBlur('lastName')}
-              disabled={isLoading}
+              {...createFieldHandlers('lastName')}
+              disabled={isSubmitting}
               hasError={touched.lastName && errors.lastName}
             />
             {touched.lastName && errors.lastName && (
               <ErrorMessage>{errors.lastName}</ErrorMessage>
             )}
           </div>
+
+          {/* DNI Field */}
           <div>
             <DniInput
               value={formData.dni}
-              onChange={onFieldChange('dni')}
-              onBlur={onFieldBlur('dni')}
-              disabled={isLoading}
+              {...createFieldHandlers('dni')}
+              disabled={isSubmitting}
               hasError={touched.dni && errors.dni}
             />
             {touched.dni && errors.dni && (
               <ErrorMessage>{errors.dni}</ErrorMessage>
             )}
           </div>
+
+          {/* Email Field */}
           <div>
             <EmailInput
               value={formData.email}
-              onChange={onFieldChange('email')}
-              onBlur={onFieldBlur('email')}
-              disabled={isLoading}
+              {...createFieldHandlers('email')}
+              disabled={isSubmitting}
               hasError={touched.email && errors.email}
             />
             {touched.email && errors.email && (
               <ErrorMessage>{errors.email}</ErrorMessage>
             )}
           </div>
-          <NextButton type="submit" disabled={!canSubmit} isLoading={isLoading}>
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+
+          {/* Submit Button */}
+          <NextButton
+            type="submit"
+            disabled={!canSubmit}
+            isLoading={isSubmitting}
+          >
+            {isSubmitting ? 'Creating Account...' : 'Create Account'}
           </NextButton>
         </div>
 
+        {/* Sign In Link */}
         <div className="mt-1.5 md:mt-2 flex justify-between">
           <Paragraph className="text-xs md:text-sm text-text-secondary">
             Do you have an account?

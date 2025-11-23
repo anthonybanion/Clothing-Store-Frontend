@@ -8,44 +8,46 @@
 // Last Updated: 2025-11-21
 // ==========================================
 
-// Regular expressions
+// Regular expressions (consistentes con backend)
 const USERNAME_REGEX = /^[a-zA-Z0-9._]{2,30}$/;
 
-// Funciones de validación individuales
+// Funciones de validación individuales - ESTANDARIZADAS A NULL
 export const validateUsername = (username) => {
   if (!username) return 'Username is required';
   if (username.length < 2 || username.length > 30)
     return 'Username must be 2-30 characters';
   if (!USERNAME_REGEX.test(username))
     return 'Username may only contain letters, numbers, dots, and underscores';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validatePassword = (password) => {
   if (!password) return 'Password is required';
   if (password.length < 6) return 'Password must be at least 6 characters';
   if (password.length > 255) return 'Password cannot exceed 255 characters';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateNewPassword = (password) => {
   if (!password) return 'New password is required';
   if (password.length < 6) return 'New password must be at least 6 characters';
   if (password.length > 255) return 'New password cannot exceed 255 characters';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateRole = (role) => {
   if (!role) return 'Role is required';
   if (!['client', 'admin'].includes(role))
     return 'Role must be either "client" or "admin"';
-  return '';
+  return null; // ← Cambiado a null
 };
 
-export const validateActive = (active) => {
-  if (active === undefined || active === null) return '';
-  if (typeof active !== 'boolean') return 'Active status must be true or false';
-  return '';
+export const validateActive = (active, isRequired = false) => {
+  if (isRequired && (active === undefined || active === null))
+    return 'Active status is required';
+  if (active !== undefined && active !== null && typeof active !== 'boolean')
+    return 'Active status must be true or false';
+  return null; // ← Cambiado a null
 };
 
 export const validatePerson = (person) => {
@@ -53,42 +55,53 @@ export const validatePerson = (person) => {
   // Validación básica de MongoDB ID (24 caracteres hex)
   if (typeof person !== 'string' || !/^[0-9a-fA-F]{24}$/.test(person))
     return 'Valid person ID is required';
-  return '';
+  return null; // ← Cambiado a null
 };
 
-// Validación completa del formulario
+// Helper para validación condicional
+const validateIfPresent = (value, validator, isRequired = false) => {
+  if (value === undefined) return null;
+  return validator(value, isRequired);
+};
+
+// Complete form validation
 export const validateAccountForm = (formData, isPartialUpdate = false) => {
   const errors = {};
 
-  // Validaciones condicionales para actualización parcial
-  if (!isPartialUpdate || formData.username !== undefined) {
-    errors.username = validateUsername(formData.username);
-  }
+  // Validación condicional más limpia
+  errors.username = validateIfPresent(
+    formData.username,
+    validateUsername,
+    !isPartialUpdate
+  );
 
-  if (!isPartialUpdate || formData.password !== undefined) {
-    errors.password = validatePassword(formData.password);
-  }
+  errors.password = validateIfPresent(
+    formData.password,
+    validatePassword,
+    !isPartialUpdate
+  );
 
-  if (!isPartialUpdate || formData.role !== undefined) {
-    errors.role = validateRole(formData.role);
-  }
+  errors.role = validateIfPresent(
+    formData.role,
+    validateRole,
+    !isPartialUpdate
+  );
 
-  if (formData.active !== undefined) {
-    errors.active = validateActive(formData.active);
-  }
+  errors.active = validateActive(formData.active, !isPartialUpdate);
+  errors.person = validateIfPresent(
+    formData.person,
+    validatePerson,
+    !isPartialUpdate
+  );
 
-  if (!isPartialUpdate || formData.person !== undefined) {
-    errors.person = validatePerson(formData.person);
-  }
-
-  // Para actualización parcial: validar que hay al menos un campo
+  // Para partial update: validar que al menos un campo esté presente
   if (isPartialUpdate && Object.keys(formData).length === 0) {
     errors._general = 'At least one field must be provided for update';
   }
 
-  // Filtrar errores vacíos y determinar si es válido
+  // Filtrar solo errores reales (no null)
   const filteredErrors = Object.fromEntries(
-    Object.entries(errors).filter(([_, value]) => value !== '')
+    Object.entries(errors).filter(([_, value]) => value !== null)
   );
 
   const isValid = Object.keys(filteredErrors).length === 0;
@@ -98,10 +111,7 @@ export const validateAccountForm = (formData, isPartialUpdate = false) => {
 
 // Validaciones específicas para operaciones individuales
 export const validateAccountStatus = (active) => {
-  if (active === undefined || active === null)
-    return 'Active field is required';
-  if (typeof active !== 'boolean') return 'Active must be true or false';
-  return '';
+  return validateActive(active, true);
 };
 
 export const validateResetPassword = (newPassword) => {
@@ -116,7 +126,7 @@ export const validateAccountRole = (role) => {
   return validateRole(role);
 };
 
-// Validación individual de campo (útil para validación en tiempo real)
+// Individual field validation (para validación en tiempo real)
 export const validateAccountField = (
   fieldName,
   value,
@@ -127,36 +137,22 @@ export const validateAccountField = (
     password: validatePassword,
     newPassword: validateNewPassword,
     role: validateRole,
-    active: validateActive,
+    active: (val) => validateActive(val, !isPartialUpdate),
     person: validatePerson,
   };
 
   if (!validators[fieldName]) {
-    return '';
+    return null;
   }
 
   return validators[fieldName](value);
 };
 
-// Utilidad para verificar si el formulario tiene cambios
+// Utility to check if the form has changes
 export const hasAccountChanges = (originalData, currentData) => {
   return Object.keys(currentData).some((key) => {
     return currentData[key] !== originalData[key];
   });
 };
 
-// Validación para login
-export const validateLoginForm = (credentials) => {
-  const errors = {};
-
-  errors.username = validateUsername(credentials.username);
-  errors.password = validatePassword(credentials.password);
-
-  const filteredErrors = Object.fromEntries(
-    Object.entries(errors).filter(([_, value]) => value !== '')
-  );
-
-  const isValid = Object.keys(filteredErrors).length === 0;
-
-  return { errors: filteredErrors, isValid };
-};
+// ELIMINAR: validateLoginForm - Ya existe en authValidation.js

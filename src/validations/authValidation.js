@@ -2,18 +2,22 @@
 // Frontend validations for auth forms
 
 // Validation rules
+// validations/authValidation.js
+// Frontend validations for auth forms
+
+// Validation rules (consistentes con backend)
 const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
 const PASSWORD_MIN_LENGTH = 6;
 const PASSWORD_MAX_LENGTH = 255;
 
-// Validation functions
+// Validation functions - ESTANDARIZADAS A NULL
 export const validateUsername = (username) => {
   if (!username) return 'Username is required';
   if (username.length < 3) return 'Username must be at least 3 characters';
   if (username.length > 20) return 'Username cannot exceed 20 characters';
   if (!USERNAME_REGEX.test(username))
     return 'Username can only contain letters, numbers and underscore';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validatePassword = (password) => {
@@ -22,12 +26,12 @@ export const validatePassword = (password) => {
     return `Password must be at least ${PASSWORD_MIN_LENGTH} characters`;
   if (password.length > PASSWORD_MAX_LENGTH)
     return `Password cannot exceed ${PASSWORD_MAX_LENGTH} characters`;
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateCurrentPassword = (currentPassword) => {
   if (!currentPassword) return 'Current password is required';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateNewPassword = (newPassword, currentPassword = '') => {
@@ -38,7 +42,7 @@ export const validateNewPassword = (newPassword, currentPassword = '') => {
     return `New password cannot exceed ${PASSWORD_MAX_LENGTH} characters`;
   if (newPassword === currentPassword)
     return 'New password must be different from current password';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateRefreshToken = (refreshToken) => {
@@ -46,12 +50,12 @@ export const validateRefreshToken = (refreshToken) => {
   // Basic JWT format validation (3 parts separated by dots)
   const jwtParts = refreshToken.split('.');
   if (jwtParts.length !== 3) return 'Invalid refresh token format';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 export const validateToken = (token) => {
   if (!token) return 'Token is required';
-  return '';
+  return null; // ← Cambiado a null
 };
 
 // Complete form validations
@@ -61,8 +65,9 @@ export const validateLoginForm = (formData) => {
     password: validatePassword(formData.password),
   };
 
+  // Filtrar solo errores reales (no null)
   const filteredErrors = Object.fromEntries(
-    Object.entries(errors).filter(([_, value]) => value !== '')
+    Object.entries(errors).filter(([_, value]) => value !== null)
   );
 
   const isValid = Object.keys(filteredErrors).length === 0;
@@ -79,8 +84,9 @@ export const validateChangePasswordForm = (formData) => {
     ),
   };
 
+  // Filtrar solo errores reales (no null)
   const filteredErrors = Object.fromEntries(
-    Object.entries(errors).filter(([_, value]) => value !== '')
+    Object.entries(errors).filter(([_, value]) => value !== null)
   );
 
   const isValid = Object.keys(filteredErrors).length === 0;
@@ -100,7 +106,7 @@ export const validateAuthField = (fieldName, value, formData = {}) => {
   };
 
   if (!validators[fieldName]) {
-    return '';
+    return null;
   }
 
   return validators[fieldName](value);

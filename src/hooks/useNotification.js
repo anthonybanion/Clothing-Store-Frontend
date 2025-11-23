@@ -8,55 +8,49 @@
 // Last Updated: 2025-11-21
 // ==========================================
 
+// useNotification.js
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Custom hook for notifications
 export const useNotification = () => {
+  // Configuración por defecto
+  const defaultOptions = {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  };
+
   const showSuccess = (message, options = {}) => {
     toast.success(message, {
-      position: 'top-right',
+      ...defaultOptions,
       autoClose: 3000,
-      hideProgressBar: false, // Optional: show progress bar
-      closeOnClick: true, // Optional: close on click
-      pauseOnHover: true, // Optional: pause on hover
-      draggable: true, // Optional: allow drag to dismiss
       ...options,
     });
   };
 
   const showError = (message, options = {}) => {
     toast.error(message, {
-      position: 'top-right',
+      ...defaultOptions,
       autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
       ...options,
     });
   };
 
   const showWarning = (message, options = {}) => {
     toast.warn(message, {
-      position: 'top-right',
+      ...defaultOptions,
       autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
       ...options,
     });
   };
 
   const showInfo = (message, options = {}) => {
     toast.info(message, {
-      position: 'top-right',
+      ...defaultOptions,
       autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
       ...options,
     });
   };
