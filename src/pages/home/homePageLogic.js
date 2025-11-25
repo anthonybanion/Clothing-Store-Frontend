@@ -1,10 +1,21 @@
+// ==========================================
+//
+// Description: Home Page Business Logic
+//
+// File: homePageLogic.js
+// Author: Anthony Bañon
+// Created: [Fecha]
+// Last Updated: [Fecha]
+// ==========================================
+
 import { categoryService } from '../../services/category/categoryService';
 import { useNotification } from '../../hooks/useNotification';
 import { useState, useEffect } from 'react';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const STATIC_URL =
+  import.meta.env.VITE_STATIC_URL || 'http://localhost:5000/uploads';
 
-export const homePageLogic = () => {
+export const useHomePageLogic = () => {
   const { showError } = useNotification();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,30 +23,24 @@ export const homePageLogic = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        setLoading(true);
         const response = await categoryService.getAll();
-        console.log('API Response:', response); // Para debugging
+        console.log('Categories response:', response);
 
-        // Extraer el array de categorías de response.data.categories
         const categoriesData = response.data?.categories || [];
-
-        // Transformar los datos para que coincidan con lo que espera CategoryCard
         const transformedCategories = categoriesData.map((category) => ({
           id: category._id,
           name: category.name,
           imageSrc: category.image?.desktop
-            ? `${BASE_URL}${category.image.desktop}`
-            : '/default-category.jpg',
+            ? `${STATIC_URL}${category.image.desktop.replace('/uploads/', '/')}`
+            : '/default-image.jpg',
           imageAlt: category.name,
-          description: category.description,
         }));
 
-        console.log('Transformed categories:', transformedCategories); // Para debugging
+        console.log('Transformed categories:', transformedCategories);
         setCategories(transformedCategories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Get categories error:', error);
         showError('Failed to load categories');
-        setCategories([]);
       } finally {
         setLoading(false);
       }
