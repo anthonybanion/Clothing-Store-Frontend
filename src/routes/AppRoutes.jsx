@@ -1,14 +1,28 @@
+// ==========================================
+//
+// Description: App Routes
+//
+// File: AppRoutes.jsx
+// Author: Anthony Bañon
+// Created: 2025-11-24
+// Last Updated: 2025-11-24
+// ==========================================
+
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ProductPage } from '../pages/product/ProductPage';
-import { HomePage } from '../pages/home/HomePage';
-import { ProfilePage } from '../pages/profile/ProfilePage';
+// Pages
+import ClothesPage from '../pages/clothes/ClothesPage';
+import CartPage from '../pages/cart/CartPage';
+import HomePage from '../pages/home/HomePage';
+import ProfilePage from '../pages/profile/ProfilePage';
 import LoginPage from '../pages/login/LoginPage';
-import { UnauthorizedPage } from '../pages/auth/Unauthorized';
-import { ProtectedRoute } from './ProtectedRoute';
+import UnauthorizedPage from '../pages/auth/Unauthorized';
 import RegisterPage from '../pages/register/RegisterPage';
 import SignupPage from '../pages/signup/SignupPage';
+// Action Wrappers
+import { ProtectedRoute } from './ProtectedRoute';
 import { SignupRoute } from './SignupRoute';
+
 export const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
@@ -24,7 +38,8 @@ export const AppRoutes = () => {
           </SignupRoute>
         }
       />
-      <Route path="/products" element={<ProductPage />} />
+      <Route path="/clothes" element={<ClothesPage />} />
+      <Route path="/cart" element={<CartPage />} />
       <Route
         path="/profile"
         element={
