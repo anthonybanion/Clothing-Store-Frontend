@@ -12,7 +12,8 @@ export const CategoryGrid = memo(({ categories }) => {
       {categories.map((category) => (
         <CategoryCard
           key={category.id}
-          src={category.imageSrc}
+          imageMobile={category.imageMobile}
+          imageDesktop={category.imageDesktop}
           alt={category.imageAlt}
           name={category.name}
         />

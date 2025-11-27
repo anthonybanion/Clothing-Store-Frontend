@@ -30,9 +30,12 @@ export const useHomePageLogic = () => {
         const transformedCategories = categoriesData.map((category) => ({
           id: category._id,
           name: category.name,
-          imageSrc: category.image?.desktop
+          imageMobile: category.image?.mobile
+            ? `${STATIC_URL}${category.image.mobile.replace('/uploads/', '/')}`
+            : '/default-mobile.jpg',
+          imageDesktop: category.image?.desktop
             ? `${STATIC_URL}${category.image.desktop.replace('/uploads/', '/')}`
-            : '/default-image.jpg',
+            : '/default-desktop.jpg',
           imageAlt: category.name,
         }));
 
@@ -47,7 +50,7 @@ export const useHomePageLogic = () => {
     };
 
     fetchCategories();
-  }, [showError]);
+  }, []);
 
   const result = useMemo(
     () => ({

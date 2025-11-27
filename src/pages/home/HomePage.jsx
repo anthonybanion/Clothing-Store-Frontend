@@ -24,10 +24,16 @@ export default function HomePage() {
   // Memoize carousel images to avoid re-creation on each render
   const carouselImages = useMemo(() => [slide1, slide2, slide3], []);
 
+  // ADD THIS - useMemo for categoriesContent
+  const categoriesContent = useMemo(
+    () => <CategoryGrid categories={categories} />,
+    [categories]
+  );
+
   return (
     <HomeTemplate
       carouselImages={carouselImages}
-      categoriesContent={<CategoryGrid categories={categories} />}
+      categoriesContent={categoriesContent}
       isLoading={loading}
     />
   );
