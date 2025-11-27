@@ -6,6 +6,7 @@ export const Image = ({ src, alt = '', className = '' }) => {
       alt={alt}
       className={`${baseStyles} ${className}`}
       draggable={false}
+      loading="lazy"
     />
   );
 };

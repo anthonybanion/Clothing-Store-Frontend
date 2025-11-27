@@ -10,7 +10,7 @@
 
 import { categoryService } from '../../services/category/categoryService';
 import { useNotification } from '../../hooks/useNotification';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const STATIC_URL =
   import.meta.env.VITE_STATIC_URL || 'http://localhost:5000/uploads';
@@ -49,8 +49,13 @@ export const useHomePageLogic = () => {
     fetchCategories();
   }, [showError]);
 
-  return {
-    categories,
-    loading,
-  };
+  const result = useMemo(
+    () => ({
+      categories,
+      loading,
+    }),
+    [categories, loading]
+  );
+
+  return result;
 };
